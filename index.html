@@ -4,14 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#de7624" />
-  <meta name="description" content="Générateur premium de badge photo pour la Conférence DELOS — Média, Cinéma & IA." />
-  <title>DELOS — Générateur de badge</title>
+  <meta name="description" content="Générateur premium de badge photo pour la Conférence DELOS — Média, Cinéma & IA. Ajoute ta photo, télécharge ton badge « J'y serai ! » 1080 × 1080 prêt à partager." />
+  <meta name="keywords" content="DELOS, conférence DELOS, badge, J'y serai, Média Cinéma IA, Cotonou, 2026" />
+  <meta name="author" content="Conférence DELOS" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://delos-badge.netlify.app/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content="DELOS — Générateur de badge" />
+  <meta property="og:title" content="DELOS — Crée ton badge « J'y serai ! »" />
+  <meta property="og:description" content="Conférence DELOS · Média, Cinéma & IA · 21 → 26 septembre 2026. Ajoute ta photo et télécharge ton badge HD." />
+  <meta property="og:url" content="https://delos-badge.netlify.app/" />
+  <meta property="og:image" content="https://delos-badge.netlify.app/assets/template.png" />
+  <meta property="og:image:width" content="1080" />
+  <meta property="og:image:height" content="1080" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DELOS — Crée ton badge « J'y serai ! »" />
+  <meta name="twitter:description" content="Ajoute ta photo, télécharge ton badge DELOS 2026 prêt à partager." />
+  <meta name="twitter:image" content="https://delos-badge.netlify.app/assets/template.png" />
+  <title>DELOS — Générateur de badge « J'y serai ! »</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236d50ef'/%3E%3Cstop offset='1' stop-color='%23e87d25'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' fill='white' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"DELOS — Générateur de badge","url":"https://delos-badge.netlify.app/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","inLanguage":"fr","offers":{"@type":"Offer","price":"0"}}
+  </script>
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <noscript><p style="max-width:720px;margin:24px auto;padding:16px 20px;border-radius:14px;background:#fff3e6;color:#5a3410;font-family:system-ui,sans-serif">Active JavaScript pour créer ton badge DELOS — l'application en a besoin pour composer ton image.</p></noscript>
   <main class="shell">
     <header class="hero">
       <div class="brand-mark">DELOS</div>
@@ -32,7 +54,7 @@
           <span class="quality">1080 × 1080 px</span>
         </div>
         <div class="canvas-frame" id="canvasFrame">
-          <canvas id="badgeCanvas" width="1080" height="1080" aria-label="Aperçu du badge DELOS"></canvas>
+          <canvas id="badgeCanvas" width="1080" height="1080" role="img" aria-label="Aperçu du badge DELOS"></canvas>
           <div class="empty-overlay" id="emptyOverlay">
             <div class="empty-icon">+</div>
             <strong>Ajoute ta photo</strong>

@@ -13,7 +13,6 @@ Application web statique, premium et responsive pour la **Conférence DELOS — 
 - Zoom fluide.
 - Export PNG HD 1080 × 1080.
 - Partage natif via Web Share API sur les appareils compatibles.
-- QR événement intégré au badge.
 - Aucune photo envoyée vers un serveur : tout est généré côté navigateur.
 
 ## Lancer le projet
@@ -34,7 +33,7 @@ Puis ouvre : `http://localhost:8080`
 
 - `assets/template.png` : template graphique.
 - `assets/event-qr.png` : QR de l'événement.
-- `app.js` : dimensions du cadre photo, texte de partage, position du QR.
+- `app.js` : dimensions du cadre photo, texte de partage, rendu « J'y serai ! ».
 - `styles.css` : interface utilisateur.
 
 ## Important

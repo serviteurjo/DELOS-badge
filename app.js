@@ -17,16 +17,27 @@ const PHOTO = { x:280, y:298, w:520, h:520, r:30 };
 const template = new Image();
 let photo = new Image();
 let hasPhoto = false;
+let templateReady = false;
 let zoom = 1;
 let imageScale = 1;
 let imageX = 0;
 let imageY = 0;
 let drag = null;
 
+function setTip(msg){ previewTip.textContent = msg; }
+setTip('Chargement du modèle…');
+
 template.onload = () => {
+  templateReady = true;
   render();
+  if (!hasPhoto) setTip('Après ajout : fais glisser la photo pour la positionner.');
   // Re-render once premium script font is ready (for "J'y serai !").
   if (document.fonts?.ready) document.fonts.ready.then(() => render());
+};
+template.onerror = () => {
+  setTip("Modèle introuvable (assets/template.png). Ouvre le site depuis la racine du projet ou via le lien Netlify.");
+  const label = emptyOverlay.querySelector('strong');
+  if (label) label.textContent = 'Modèle introuvable';
 };
 template.src = TEMPLATE;
 
@@ -97,7 +108,7 @@ function drawJySerai(c){
 }
 function render(){
   ctx.clearRect(0,0,1080,1080);
-  if(template.complete) ctx.drawImage(template,0,0,1080,1080);
+  if(templateReady) ctx.drawImage(template,0,0,1080,1080);
   drawPhoto(ctx);
   if(hasPhoto) drawJySerai(ctx);
 }
@@ -126,21 +137,32 @@ fileInput.addEventListener('change',e=>{
   const img=new Image();
   img.onload=()=>{
     photo=img; hasPhoto=true; photoControls.hidden=false; emptyOverlay.style.display='none';
-    downloadBtn.disabled=false; shareBtn.disabled=false; previewTip.textContent='Glisse la photo pour la positionner · utilise le zoom si nécessaire.';
+    downloadBtn.disabled=false; shareBtn.disabled=false; setTip('Glisse la photo pour la positionner · utilise le zoom si nécessaire.');
     resetPhoto(); URL.revokeObjectURL(url);
+  };
+  img.onerror=()=>{
+    URL.revokeObjectURL(url);
+    setTip("Cette image est illisible. Essaie un fichier JPG ou PNG.");
   };
   img.src=url;
 });
 function makeBlob(){
   return new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
 }
+function exportFailed(){
+  if (location.protocol === 'file:') {
+    alert("Export bloqué : la page a été ouverte en fichier local. Ouvre-la via un serveur local (python3 -m http.server) ou via le lien Netlify, puis réessaie.");
+  } else {
+    alert("L'export a échoué. Recharge la page et réessaie.");
+  }
+}
 downloadBtn.addEventListener('click',async()=>{
-  const blob=await makeBlob(); if(!blob) return;
+  const blob=await makeBlob(); if(!blob){ exportFailed(); return; }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='badge-delos-2026.png'; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 });
 shareBtn.addEventListener('click',async()=>{
-  const blob=await makeBlob(); if(!blob) return;
+  const blob=await makeBlob(); if(!blob){ exportFailed(); return; }
   const file=new File([blob],'badge-delos-2026.png',{type:'image/png'});
   if(navigator.canShare?.({files:[file]}) && navigator.share){
     try{ await navigator.share({title:'Je serai à la Conférence DELOS 2026',text:'Rendez-vous à la Conférence DELOS — Média, Cinéma & IA.',files:[file]}); }catch(e){}

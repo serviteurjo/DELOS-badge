@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#de7624" />
+  <meta name="description" content="Générateur premium de badge photo pour la Conférence DELOS — Média, Cinéma & IA." />
+  <title>DELOS — Générateur de badge</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="brand-mark">DELOS</div>
+      <div>
+        <p class="eyebrow">CONFÉRENCE DELOS • 21 → 26 SEPTEMBRE 2026</p>
+        <h1>Crée ton badge DELOS</h1>
+        <p class="lead">Ajoute ta photo, ajuste-la dans le cadre et télécharge ton visuel prêt à partager sur WhatsApp, Facebook ou Instagram.</p>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <div class="preview-card">
+        <div class="preview-head">
+          <div>
+            <span class="kicker">APERÇU EN DIRECT</span>
+            <strong>Ton badge</strong>
+          </div>
+          <span class="quality">1080 × 1080 px</span>
+        </div>
+        <div class="canvas-frame" id="canvasFrame">
+          <canvas id="badgeCanvas" width="1080" height="1080" aria-label="Aperçu du badge DELOS"></canvas>
+          <div class="empty-overlay" id="emptyOverlay">
+            <div class="empty-icon">+</div>
+            <strong>Ajoute ta photo</strong>
+            <span>Portrait conseillé · JPG, PNG ou WEBP</span>
+          </div>
+        </div>
+        <div class="preview-tip" id="previewTip">Après ajout : fais glisser la photo pour la positionner.</div>
+      </div>
+
+      <aside class="control-card">
+        <div class="control-title">
+          <span class="step">01</span>
+          <div><strong>Personnalise ton badge</strong><span>Tout reste sur ton appareil.</span></div>
+        </div>
+
+        <label class="upload" for="photoInput" id="uploadLabel">
+          <span class="upload-icon">↑</span>
+          <span><b>Choisir ma photo</b><small>Une photo nette, de préférence verticale</small></span>
+          <input id="photoInput" type="file" accept="image/*" />
+        </label>
+
+        <div class="control-group" id="photoControls" hidden>
+          <div class="row-label"><span>Zoom</span><output id="zoomValue">1.00×</output></div>
+          <input id="zoomSlider" type="range" min="1" max="2.6" step="0.01" value="1" />
+          <div class="micro-actions">
+            <button class="ghost" id="resetBtn" type="button">Réinitialiser</button>
+            <button class="ghost" id="removeBtn" type="button">Changer la photo</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="control-title compact">
+          <span class="step">02</span>
+          <div><strong>Exporter</strong><span>Image HD sans filigrane</span></div>
+        </div>
+        <button class="primary" id="downloadBtn" type="button" disabled>
+          <span>↓</span> Télécharger mon badge
+        </button>
+        <button class="secondary" id="shareBtn" type="button" disabled>
+          <span>↗</span> Partager
+        </button>
+        <p class="privacy">🔒 Aucune photo n'est envoyée sur un serveur. La composition est faite localement dans ton navigateur.</p>
+      </aside>
+    </section>
+
+    <footer>
+      <span>Conférence DELOS · Média, Cinéma & IA</span>
+      <span>21 → 26 septembre 2026</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

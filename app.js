@@ -31,8 +31,10 @@ template.onload = () => {
   templateReady = true;
   render();
   if (!hasPhoto) setTip('Après ajout : fais glisser la photo pour la positionner.');
-  // Re-render once premium script font is ready (for "J'y serai !").
-  if (document.fonts?.ready) document.fonts.ready.then(() => render());
+  // Re-render once the premium script font is ready (for "J'y serai et toi ?").
+  // NOTE: document.fonts.ready alone does NOT guarantee Great Vibes is loaded,
+  // so we explicitly load it and re-render.
+  ensureScriptFont();
 };
 template.onerror = () => {
   setTip("Modèle introuvable (assets/template.png). Ouvre le site depuis la racine du projet ou via le lien Netlify.");
@@ -40,6 +42,23 @@ template.onerror = () => {
   if (label) label.textContent = 'Modèle introuvable';
 };
 template.src = TEMPLATE;
+
+// Explicitly load the script font used on the badge, then re-render.
+// Without this, the canvas falls back to Playfair Display / serif
+// (the bug seen in "Image 1") instead of Great Vibes (the "Image 2" look).
+function ensureScriptFont(){
+  if (!document.fonts?.load) return;
+  Promise.all([
+    document.fonts.load('104px "Great Vibes"'),
+    document.fonts.load('104px "Brush Script MT"')
+  ]).then(() => {
+    if (templateReady) render();
+  }).catch(() => {});
+  if (document.fonts?.ready) document.fonts.ready.then(() => {
+    if (templateReady) render();
+  });
+}
+ensureScriptFont();
 
 function fitScale(img){
   return Math.max(PHOTO.w / img.naturalWidth, PHOTO.h / img.naturalHeight);
@@ -86,22 +105,25 @@ function drawPhoto(c){
 }
 function drawJySerai(c){
   // Premium script caption under the photo. Only text kept on badge.
-  const label = "J'y serai !";
+  const label = "J'y serai et toi ?";
   const cx = PHOTO.x + PHOTO.w / 2;
   const cy = PHOTO.y + PHOTO.h + 78;
   c.save();
   c.textAlign='center'; c.textBaseline='middle';
   c.shadowColor='rgba(60,10,40,.45)'; c.shadowBlur=18; c.shadowOffsetY=4;
   c.fillStyle='#ffffff';
-  // Great Vibes (premium script) with elegant fallbacks
+  // Great Vibes (premium script, same as the "J'y serai !" reference badge).
+  // IMPORTANT: only script fallbacks here — never Playfair Display / serif,
+  // otherwise a font-load delay renders the serif bug.
+  const scriptStack = '"Great Vibes","Brush Script MT","Snell Roundhand","Segoe Script",cursive';
   let size = 104;
-  c.font = `${size}px "Great Vibes","Playfair Display","Brush Script MT","Snell Roundhand",cursive`;
+  c.font = `${size}px ${scriptStack}`;
   // shrink if too wide for badge
-  const maxW = 640;
+  const maxW = 800;
   const w = c.measureText(label).width;
   if (w > maxW) {
     size = Math.floor(size * maxW / w);
-    c.font = `${size}px "Great Vibes","Playfair Display","Brush Script MT","Snell Roundhand",cursive`;
+    c.font = `${size}px ${scriptStack}`;
   }
   c.fillText(label, cx, cy);
   c.restore();
@@ -139,6 +161,7 @@ fileInput.addEventListener('change',e=>{
     photo=img; hasPhoto=true; photoControls.hidden=false; emptyOverlay.style.display='none';
     downloadBtn.disabled=false; shareBtn.disabled=false; setTip('Glisse la photo pour la positionner · utilise le zoom si nécessaire.');
     resetPhoto(); URL.revokeObjectURL(url);
+    ensureScriptFont();
   };
   img.onerror=()=>{
     URL.revokeObjectURL(url);
@@ -149,6 +172,17 @@ fileInput.addEventListener('change',e=>{
 function makeBlob(){
   return new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
 }
+async function ensureFontsForExport(){
+  try {
+    if (document.fonts?.load) {
+      await Promise.all([
+        document.fonts.load('104px "Great Vibes"'),
+        document.fonts.load('104px "Brush Script MT"')
+      ]);
+      render();
+    }
+  } catch(e) {}
+}
 function exportFailed(){
   if (location.protocol === 'file:') {
     alert("Export bloqué : la page a été ouverte en fichier local. Ouvre-la via un serveur local (python3 -m http.server) ou via le lien Netlify, puis réessaie.");
@@ -157,11 +191,13 @@ function exportFailed(){
   }
 }
 downloadBtn.addEventListener('click',async()=>{
+  await ensureFontsForExport();
   const blob=await makeBlob(); if(!blob){ exportFailed(); return; }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='badge-delos-2026.png'; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 });
 shareBtn.addEventListener('click',async()=>{
+  await ensureFontsForExport();
   const blob=await makeBlob(); if(!blob){ exportFailed(); return; }
   const file=new File([blob],'badge-delos-2026.png',{type:'image/png'});
   if(navigator.canShare?.({files:[file]}) && navigator.share){

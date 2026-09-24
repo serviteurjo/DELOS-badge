@@ -33,7 +33,7 @@ Puis ouvre : `http://localhost:8080`
 
 - `assets/template.png` : template graphique.
 - `assets/event-qr.png` : QR de l'événement.
-- `app.js` : dimensions du cadre photo, texte de partage, rendu « J'y serai ! ».
+- `app.js` : dimensions du cadre photo, texte de partage, rendu « J'y serai et toi ? ».
 - `styles.css` : interface utilisateur.
 
 ## Important
